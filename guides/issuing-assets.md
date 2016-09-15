@@ -216,9 +216,10 @@ server.loadAccount(accountId).then(function(account) {
 ```
 
 ```java
-String astroDollarCode = "AstroDollar";
-String astroDollarIssuer =
-  "GC2BKLYOOYPDEFJKLKY6FNNRQMGFLVHJKQRGNSSRRGSMPGF32LHCQVGF";
+Asset astroDollar = Asset.createNonNativeAsset(
+  "AstroDollar",
+  KeyPair.fromAccountId(
+    "GC2BKLYOOYPDEFJKLKY6FNNRQMGFLVHJKQRGNSSRRGSMPGF32LHCQVGF"));
 
 // Load the account you want to check
 KeyPair keysToCheck = KeyPair.fromAccountId(
@@ -228,9 +229,7 @@ AccountResponse accountToCheck = server.accounts().account(keysToCheck);
 // See if any balances are for the asset code and issuer we're looking for
 boolean trusted = false;
 for (AccountResponse.Balance balance : accountToCheck.getBalances()) {
-  if (!balance.getAssetType().equals("native") &&
-      balance.getAssetCode().equals(astroDollarCode) &&
-      balance.getAssetIssuer().equals(astroDollarIssuer)) {
+  if (balance.getAsset().equals(astroDollar)) {
     trusted = true;
     break;
   }
